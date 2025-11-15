@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ShowPlanXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="1.539" Build="15.0.2000.5" xmlns="http://schemas.microsoft.com/sqlserver/2004/07/showplan">
+  <BatchSequence>
+    <Batch>
+      <Statements>
+        <StmtSimple StatementCompId="1" StatementEstRows="2500000" StatementId="1" StatementSubTreeCost="125.847" StatementText="SELECT * FROM Orders o, Customers c, Products p WHERE YEAR(o.OrderDate) = 2024 AND UPPER(c.CustomerName) LIKE '%ACME%' ORDER BY o.TotalAmount" StatementType="SELECT" QueryHash="0x999999" QueryPlanHash="0x888888" RetrievedFromCache="false">
+          <StatementSetOptions ANSI_NULLS="true" ANSI_PADDING="true" ANSI_WARNINGS="true" ARITHABORT="true" CONCAT_NULL_YIELDS_NULL="true" NUMERIC_ROUNDABORT="false" QUOTED_IDENTIFIER="true" />
+          <QueryPlan DegreeOfParallelism="1" MemoryGrant="256000" CachedPlanSize="128" CompileTime="250" CompileCPU="245" CompileMemory="8192">
+            <MissingIndexes>
+              <MissingIndexGroup Impact="98.7">
+                <MissingIndex Database="[SalesDB]" Schema="[dbo]" Table="[Orders]">
+                  <ColumnGroup Usage="EQUALITY">
+                    <Column Name="[OrderDate]" ColumnId="3" />
+                  </ColumnGroup>
+                  <ColumnGroup Usage="INCLUDE">
+                    <Column Name="[CustomerId]" ColumnId="2" />
+                    <Column Name="[ProductId]" ColumnId="4" />
+                    <Column Name="[TotalAmount]" ColumnId="5" />
+                  </ColumnGroup>
+                </MissingIndex>
+              </MissingIndexGroup>
+              <MissingIndexGroup Impact="95.2">
+                <MissingIndex Database="[SalesDB]" Schema="[dbo]" Table="[Customers]">
+                  <ColumnGroup Usage="EQUALITY">
+                    <Column Name="[CustomerName]" ColumnId="2" />
+                  </ColumnGroup>
+                </MissingIndex>
+              </MissingIndexGroup>
+            </MissingIndexes>
+            <RelOp AvgRowSize="500" EstimateCPU="45.5" EstimateIO="0" EstimateRebinds="0" EstimateRewinds="0" EstimatedExecutionMode="Row" EstimateRows="2500000" LogicalOp="Sort" NodeId="0" Parallel="false" PhysicalOp="Sort" EstimatedTotalSubtreeCost="125.847">
+              <OutputList>
+                <ColumnReference Database="[SalesDB]" Schema="[dbo]" Table="[Orders]" Alias="[o]" Column="OrderId" />
+                <ColumnReference Database="[SalesDB]" Schema="[dbo]" Table="[Customers]" Alias="[c]" Column="CustomerId" />
+                <ColumnReference Database="[SalesDB]" Schema="[dbo]" Table="[Products]" Alias="[p]" Column="ProductId" />
+              </OutputList>
+              <MemoryFractions Input="1" Output="1" />
+              <Sort Distinct="false">
+                <OrderBy>
+                  <OrderByColumn Ascending="true">
+                    <ColumnReference Database="[SalesDB]" Schema="[dbo]" Table="[Orders]" Alias="[o]" Column="TotalAmount" />
+                  </OrderByColumn>
+                </OrderBy>
+                <RelOp AvgRowSize="500" EstimateCPU="35.2" EstimateIO="0" EstimateRebinds="0" EstimateRewinds="0" EstimatedExecutionMode="Row" EstimateRows="2500000" LogicalOp="Nested Loops" NodeId="1" Parallel="false" PhysicalOp="Nested Loops" EstimatedTotalSubtreeCost="80.347">
+                  <OutputList>
+                    <ColumnReference Database="[SalesDB]" Schema="[dbo]" Table="[Orders]" Alias="[o]" Column="OrderId" />
+                    <ColumnReference Database="[SalesDB]" Schema="[dbo]" Table="[Customers]" Alias="[c]" Column="CustomerId" />
+                    <ColumnReference Database="[SalesDB]" Schema="[dbo]" Table="[Products]" Alias="[p]" Column="ProductId" />
+                  </OutputList>
+                  <NestedLoops Optimized="false">
+                    <RelOp AvgRowSize="300" EstimateCPU="12.5" EstimateIO="18.3" EstimateRebinds="0" EstimateRewinds="0" EstimatedExecutionMode="Row" EstimateRows="50000" LogicalOp="Table Scan" NodeId="2" Parallel="false" PhysicalOp="Table Scan" EstimatedTotalSubtreeCost="30.8">
+                      <OutputList>
+                        <ColumnReference Database="[SalesDB]" Schema="[dbo]" Table="[Orders]" Alias="[o]" Column="OrderId" />
+                        <ColumnReference Database="[SalesDB]" Schema="[dbo]" Table="[Orders]" Alias="[o]" Column="OrderDate" />
+                      </OutputList>
+                      <IndexScan Ordered="false" ForcedIndex="false" ForceSeek="false" NoExpandHint="false" Storage="RowStore">
+                        <DefinedValues>
+                          <DefinedValue>
+                            <ColumnReference Database="[SalesDB]" Schema="[dbo]" Table="[Orders]" Alias="[o]" Column="OrderId" />
+                          </DefinedValue>
+                        </DefinedValues>
+                        <Object Database="[SalesDB]" Schema="[dbo]" Table="[Orders]" Alias="[o]" IndexKind="Heap" Storage="RowStore" />
+                        <Predicate>
+                          <ScalarOperator ScalarString="YEAR([SalesDB].[dbo].[Orders].[OrderDate])=(2024)">
+                            <Compare CompareOp="EQ">
+                              <ScalarOperator>
+                                <Intrinsic FunctionName="YEAR">
+                                  <ScalarOperator>
+                                    <Identifier>
+                                      <ColumnReference Database="[SalesDB]" Schema="[dbo]" Table="[Orders]" Alias="[o]" Column="OrderDate" />
+                                    </Identifier>
+                                  </ScalarOperator>
+                                </Intrinsic>
+                              </ScalarOperator>
+                              <ScalarOperator>
+                                <Const ConstValue="(2024)" />
+                              </ScalarOperator>
+                            </Compare>
+                          </ScalarOperator>
+                        </Predicate>
+                      </IndexScan>
+                    </RelOp>
+                    <RelOp AvgRowSize="200" EstimateCPU="8.5" EstimateIO="6.2" EstimateRebinds="0" EstimateRewinds="0" EstimatedExecutionMode="Row" EstimateRows="50" LogicalOp="Clustered Index Scan" NodeId="3" Parallel="false" PhysicalOp="Clustered Index Scan" EstimatedTotalSubtreeCost="14.7">
+                      <OutputList>
+                        <ColumnReference Database="[SalesDB]" Schema="[dbo]" Table="[Customers]" Alias="[c]" Column="CustomerId" />
+                        <ColumnReference Database="[SalesDB]" Schema="[dbo]" Table="[Customers]" Alias="[c]" Column="CustomerName" />
+                      </OutputList>
+                      <IndexScan Ordered="false" ForcedIndex="false" ForceSeek="false" NoExpandHint="false" Storage="RowStore">
+                        <DefinedValues>
+                          <DefinedValue>
+                            <ColumnReference Database="[SalesDB]" Schema="[dbo]" Table="[Customers]" Alias="[c]" Column="CustomerId" />
+                          </DefinedValue>
+                        </DefinedValues>
+                        <Object Database="[SalesDB]" Schema="[dbo]" Table="[Customers]" Alias="[c]" Index="[PK_Customers]" IndexKind="Clustered" Storage="RowStore" />
+                        <Predicate>
+                          <ScalarOperator ScalarString="UPPER([SalesDB].[dbo].[Customers].[CustomerName]) LIKE '%ACME%'">
+                            <Intrinsic FunctionName="LIKE">
+                              <ScalarOperator>
+                                <Intrinsic FunctionName="UPPER">
+                                  <ScalarOperator>
+                                    <Identifier>
+                                      <ColumnReference Database="[SalesDB]" Schema="[dbo]" Table="[Customers]" Alias="[c]" Column="CustomerName" />
+                                    </Identifier>
+                                  </ScalarOperator>
+                                </Intrinsic>
+                              </ScalarOperator>
+                              <ScalarOperator>
+                                <Const ConstValue="'%ACME%'" />
+                              </ScalarOperator>
+                            </Intrinsic>
+                          </ScalarOperator>
+                        </Predicate>
+                      </IndexScan>
+                    </RelOp>
+                  </NestedLoops>
+                </RelOp>
+              </Sort>
+            </RelOp>
+          </QueryPlan>
+        </StmtSimple>
+      </Statements>
+    </Batch>
+  </BatchSequence>
+</ShowPlanXML>

@@ -312,7 +312,7 @@ for i, smell in enumerate(smells4, 1):
     print(f"   Description: {smell.description}")
     print(f"   Suggestion: {smell.suggestion}")
 
-# Test Case 5: Repeated table access (your real-world scenario!)
+# Test Case 5: Repeated table access 
 print("\n" + "="*70)
 test_query5 = """
 SELECT 
@@ -326,7 +326,7 @@ LEFT JOIN employees e3 ON e1.department_id = e3.department_id
 WHERE e1.status = 'Active'
 """
 
-print("\n📋 Test Query 5 (Repeated table access - your scenario!):")
+print("\n📋 Test Query 5 (Repeated table access):")
 print(test_query5)
 detector5 = SmellDetector(test_query5)
 smells5 = detector5.detect_all()
@@ -338,9 +338,6 @@ for i, smell in enumerate(smells5, 1):
     print(f"   Description: {smell.description}")
     print(f"   Suggestion: {smell.suggestion}")
 
-print("\n💡 This is the exact scenario you dealt with in your career!")
-print("   The 'employees' table is accessed 3 times (e1, e2, e3).")
-print("   Your solution: Create temp table once, add indexes, query from it!")
 
 
 # Test Case 6: Temp table reuse (should NOT be flagged)
